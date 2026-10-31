@@ -1,0 +1,52 @@
+_commit: v1.12.1-13-gf88b79a
+_src_path: /Users/crthomas/code/charlesthomas/homelab-template
+additionalResources: ''
+cnpg: true
+cnpgBitwardenItem: 74679add-029b-4b3e-b319-1a42026640fa
+cnpgDatabase: freshrss
+cnpgImage: ghcr.io/cloudnative-pg/postgresql
+cnpgName: postgres
+cnpgOwner: freshrss
+cnpgSize: 5Gi
+cnpgTag: '18.6'
+helm: false
+homepageDescription: RSS Reader
+homepageEnabled: true
+homepageGroup: Media
+homepageIcon: freshrss
+homepageName: FreshRSS
+ingClass: nginx-external
+ingCname: rss.crt.lol
+ingExtraAnnotations: ''
+ingHost: rss.crt.lol
+ingName: freshrss
+ingPathType: Prefix
+ingWebSockets: false
+ingress: true
+labels: 'app: freshrss'
+name: freshrss
+namespace: freshrss
+pvc: true
+pvcAccessMode: ReadWriteOnce
+pvcName: freshrss
+pvcSize: 1Gi
+pvcStorageClass: longhorn-retain
+reloader: true
+resources:
+- deployments.yaml
+- external-secrets.yaml
+- ingresses.yaml
+- postgres.yaml
+- pvcs.yaml
+- services.yaml
+service: true
+serviceAccount: false
+svcName: freshrss
+svcPortName: http
+svcPortNum: 80
+svcProtocol: TCP
+svcSelector: 'app: freshrss'
+svcTargetPort: http
+svcType: ClusterIP
+upstreamURL: https://github.com/FreshRSS/FreshRSS
+url: https://github.com/charlesthomas/homelab-freshrss

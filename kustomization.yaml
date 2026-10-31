@@ -1,0 +1,45 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: freshrss
+
+commonAnnotations:
+  repo: https://github.com/charlesthomas/homelab-freshrss
+commonLabels:
+  app: freshrss
+
+resources:
+- resources/deployments.yaml
+- resources/external-secrets.yaml
+- resources/ingresses.yaml
+- resources/namespaces.yaml
+- resources/postgres.yaml
+- resources/pvcs.yaml
+- resources/services.yaml
+patches:
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: all
+      namespace: freshrss
+      annotations:
+        reloader.stakater.com/auto: "true"
+  target:
+    kind: Deployment
+- patch: |-
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: freshrss
+      namespace: freshrss
+      annotations:
+        gethomepage.dev/href: https://rss.crt.lol
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/description: RSS Reader
+        gethomepage.dev/group: Media
+        gethomepage.dev/icon: freshrss
+        gethomepage.dev/name: FreshRSS
+        gethomepage.dev/pod-selector: ""
+  target:
+    kind: Ingress
