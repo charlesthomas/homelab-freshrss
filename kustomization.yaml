@@ -5,8 +5,10 @@ namespace: freshrss
 
 commonAnnotations:
   repo: https://github.com/charlesthomas/homelab-freshrss
-commonLabels:
-  app: freshrss
+labels:
+- includeSelectors: true
+  pairs:
+    app: freshrss
 
 resources:
 - resources/deployments.yaml
