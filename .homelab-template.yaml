@@ -16,7 +16,7 @@ homepageGroup: Media
 homepageIcon: freshrss
 homepageName: FreshRSS
 ingClass: nginx-external
-ingCname: rss.crt.lol
+ingCname: crt.lol
 ingExtraAnnotations: ''
 ingHost: rss.crt.lol
 ingName: freshrss

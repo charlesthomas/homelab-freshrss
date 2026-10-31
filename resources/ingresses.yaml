@@ -6,7 +6,7 @@ metadata:
   namespace: freshrss
   annotations:
     external-dns.alpha.kubernetes.io/hostname: rss.crt.lol
-    external-dns.alpha.kubernetes.io/target: rss.crt.lol
+    external-dns.alpha.kubernetes.io/target: crt.lol
 spec:
   ingressClassName: nginx-external
   rules:
