@@ -1,4 +1,4 @@
-_commit: v1.12.1-13-gf88b79a
+_commit: v1.12.1-16-gd9a8f1b
 _src_path: /Users/crthomas/code/charlesthomas/homelab-template
 additionalResources: ''
 cnpg: true
@@ -9,6 +9,7 @@ cnpgName: postgres
 cnpgOwner: freshrss
 cnpgSize: 5Gi
 cnpgTag: '18.6'
+grafanaDashboard: true
 helm: false
 homepageDescription: RSS Reader
 homepageEnabled: true

@@ -5,8 +5,10 @@ namespace: freshrss
 
 commonAnnotations:
   repo: https://github.com/charlesthomas/homelab-freshrss
-commonLabels:
-  app: freshrss
+labels:
+- includeSelectors: true
+  pairs:
+    app: freshrss
 
 resources:
 - resources/deployments.yaml
@@ -43,3 +45,11 @@ patches:
         gethomepage.dev/pod-selector: ""
   target:
     kind: Ingress
+configMapGenerator:
+- name: grafana-dashboard-freshrss
+  files:
+  - grafana/freshrss.json
+  options:
+    disableNameSuffixHash: true
+    labels:
+      grafana_dashboard: "1"
