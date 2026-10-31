@@ -1,0 +1,90 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: freshrss
+  namespace: freshrss
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: freshrss
+  template:
+    metadata:
+      labels:
+        app: freshrss
+    spec:
+      containers:
+        - name: freshrss
+          image: freshrss/freshrss:1.30.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          env:
+            - name: TZ
+              value: America/Detroit
+            - name: CRON_MIN
+              value: "*/15"
+            - name: TRUSTED_PROXY
+              value: 10.42.0.0/16
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: password
+            - name: FRESHRSS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: freshrss
+                  key: username
+            - name: FRESHRSS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freshrss
+                  key: password
+            - name: FRESHRSS_API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: freshrss
+                  key: api-password
+            - name: FRESHRSS_INSTALL
+              value: >-
+                --api-enabled
+                --base-url https://rss.crt.lol
+                --db-type pgsql
+                --db-host postgres-rw
+                --db-base freshrss
+                --db-user $(DB_USER)
+                --db-password $(DB_PASSWORD)
+                --default-user $(FRESHRSS_USERNAME)
+                --language en
+            - name: FRESHRSS_USER
+              value: >-
+                --user $(FRESHRSS_USERNAME)
+                --password $(FRESHRSS_PASSWORD)
+                --api-password $(FRESHRSS_API_PASSWORD)
+                --language en
+          livenessProbe:
+            httpGet:
+              path: /i/
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /i/
+              port: http
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/www/FreshRSS/data
+              name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: freshrss
