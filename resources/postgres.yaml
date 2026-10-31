@@ -1,0 +1,60 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: postgres-auth
+  namespace: freshrss
+spec:
+  target:
+    name: postgres-auth
+    deletionPolicy: Delete
+    template:
+      type: kubernetes.io/basic-auth
+  data:
+    - secretKey: password
+      remoteRef:
+        conversionStrategy: Default
+        decodingStrategy: None
+        key: 74679add-029b-4b3e-b319-1a42026640fa
+        metadataPolicy: None
+        property: password
+      sourceRef:
+        storeRef:
+          name: bitwarden-login
+          kind: ClusterSecretStore
+    - secretKey: username
+      remoteRef:
+        conversionStrategy: Default
+        decodingStrategy: None
+        key: 74679add-029b-4b3e-b319-1a42026640fa
+        metadataPolicy: None
+        property: username
+      sourceRef:
+        storeRef:
+          name: bitwarden-login
+          kind: ClusterSecretStore
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+  namespace: freshrss
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true,Prune=false,Delete=false
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6
+  enablePDB: false
+  inheritedMetadata:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9187"
+  storage:
+    size: 5Gi
+    storageClass: longhorn-retain
+  bootstrap:
+    initdb:
+      database: freshrss
+      owner: freshrss
+      secret:
+        name: postgres-auth
